@@ -2,30 +2,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: myapp
+ name: php-apache
  labels:
-  app: myapp
+  app: php-apache
 spec:
  replicas: 1
  selector:
   matchLabels:
-   app: myapp
+   app: php-apache
  template:
   metadata: 
    labels:
-    app: myapp
+    app: php-apache
   spec:
    containers:
-   - name: myapp
+   - name: php-apache
      image: chelkala/devops:tagversion
      ports:
-     - containerPort: 8080
+     - containerPort: 80
+     resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
      
 apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    test: myapp
+    test: php-apache
   name: liveness-exec
 spec:
   containers:
@@ -47,12 +52,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp
+  name: php-apache
+  labels:
+     run: php-apache
 spec:
-  type: LoadBalancer
-  selector:
-    app: myapp
-  ports:
+    ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+    selector:
+      run: php-apache
