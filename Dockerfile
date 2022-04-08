@@ -1,5 +1,3 @@
-FROM tomcat:8.0.20-jre8
-
-RUN mkdir /usr/local/tomcat/webapps/myapp
-
-COPY kubernetes/target/kubernetes-1.0-AMIT.war /usr/local/tomcat/webapps/kubernetes-1.0-AMIT.war
+FROM php:5-apache
+COPY index.php /var/www/html/index.php
+RUN chmod a+rx index.php
